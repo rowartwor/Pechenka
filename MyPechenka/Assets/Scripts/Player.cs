@@ -18,6 +18,7 @@ public class Players : MonoBehaviour
 
     private float minMovingSpeed = 0.1f;
     private bool isRunning = false;
+    private bool isControlEnabled = true; // ch
 
     public enum ControlType { PC, Android };
 
@@ -28,7 +29,9 @@ public class Players : MonoBehaviour
     }
     private void Update()
     {
-        if(controlType == ControlType.PC)
+        if (!isControlEnabled) return; // ch
+
+        if (controlType == ControlType.PC)
         {
             if (playerNumber == 1)
             {
@@ -55,6 +58,7 @@ public class Players : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isControlEnabled) return; // ch
 
         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
 
@@ -66,6 +70,19 @@ public class Players : MonoBehaviour
         {
             isRunning = false;
         }
+    }
+
+    public void DisableControl() // ch
+    {
+        isControlEnabled = false;
+        moveInput = Vector2.zero;
+        moveVelocity = Vector2.zero;
+        Invoke("EnableControl", 5);   //¿’“”Õ√!!!!!1111!! MAGIC NUMBER
+    }
+
+    public void EnableControl()
+    {
+        isControlEnabled = true;
     }
 
     public bool IsRunning()
